@@ -1,21 +1,20 @@
 <?php
 
 namespace App\Repositories;
-use Illuminate\Support\Facades\Http;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 class PackagistRepository
 {
    
     public static function getUrl($name){
+       return Cache::remember($name, Carbon::now()->addHours(4)->diffInSeconds(), function () use ($name) {
+            $response = Http::get('https://packagist.org/search.json', [
+                'q' => $name
+            ]);  
 
-        $response = Http::get('https://packagist.org/search.json', [
-            'q' => $name
-        ]);
-
-        if($response['total'] === 0) {
-            return null;            
-        }
-
-        return $response['results'][0]['repository'];
+            return $response['total'] !== 0 ? $response['results'][0]['repository'] : null;
+        });       
     }
 }
