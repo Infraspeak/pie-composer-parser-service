@@ -27,7 +27,7 @@ FROM php:7.4-fpm
 WORKDIR /app
 
 # Install PHP dependencies
-RUN apt-get update -y && apt-get install -y libxml2-dev
+RUN apt-get update -y && apt-get install -y libxml2-dev libonig-dev
 RUN docker-php-ext-install pdo pdo_mysql mbstring opcache tokenizer xml ctype json bcmath pcntl
 
 # Copy Composer dependencies
