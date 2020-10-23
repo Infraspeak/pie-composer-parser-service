@@ -9,6 +9,6 @@ class RedisMessageController extends Controller
 {
     public function __invoke(Request $request)
     {
-        Redis::publish('COMPOSER_FILE', $request->getContent());
+        Redis::publish(env('MESSAGE_TOPIC'), $request->getContent());
     }
 }

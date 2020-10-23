@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\ListenToQueue;
+use App\Console\Commands\TestMessageQueue;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
@@ -14,8 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
-        ListenToQueue::class
+        ListenToQueue::class,
+        TestMessageQueue::class,
     ];
 
     /**
