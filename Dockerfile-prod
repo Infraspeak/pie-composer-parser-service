@@ -1,0 +1,38 @@
+#
+# PHP Dependencies
+#
+FROM composer:2.0 as vendor
+
+WORKDIR /app
+
+COPY database/ database/
+COPY composer.json composer.json
+COPY composer.lock composer.lock
+
+RUN composer install \
+    --no-interaction \
+    --no-plugins \
+    --no-scripts \
+    --no-dev \
+    --prefer-dist
+
+COPY . .
+RUN composer dump-autoload
+
+#
+# Application
+#
+FROM php:7.4-fpm
+
+WORKDIR /app
+
+# Install PHP dependencies
+RUN apt-get update -y && apt-get install -y libxml2-dev
+RUN docker-php-ext-install pdo pdo_mysql mbstring opcache tokenizer xml ctype json bcmath pcntl
+
+# Copy Composer dependencies
+COPY --from=vendor /app/vendor/ ./vendor/
+COPY . .
+
+RUN php artisan config:cache
+RUN php artisan route:cache
