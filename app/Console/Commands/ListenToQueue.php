@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Parsers\ComposerFileParser;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
@@ -40,7 +41,7 @@ class ListenToQueue extends Command
     public function handle()
     {
         Redis::subscribe(['COMPOSER_FILE'], function($message) {
-            dump($message);
+            ComposerFileParser::parse($message);
         });
     }
 }
