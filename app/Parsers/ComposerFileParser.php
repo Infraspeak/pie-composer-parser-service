@@ -2,6 +2,8 @@
 
 namespace App\Parsers;
 
+use App\Repositories\PackagistRepository;
+
 class ComposerFileParser
 {
     public static function parse(string $composerFile)
@@ -14,7 +16,7 @@ class ComposerFileParser
             $result[] = [
                 'name' => $name,
                 'version' => $version,
-                'url' => '',
+                'url' => PackagistRepository::getUrl($name),
             ];
         }
         dump($result);
