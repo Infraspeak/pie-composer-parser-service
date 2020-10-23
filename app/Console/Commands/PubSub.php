@@ -4,10 +4,11 @@ namespace App\Console\Commands;
 
 use App\Parsers\ComposerFileParser;
 use App\Models\User;
+use App\Repositories\RedisMessageRepository;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 
-class ListenToQueue extends Command
+class PubSub extends Command
 {
     /**
      * The name and signature of the console command.
@@ -21,7 +22,7 @@ class ListenToQueue extends Command
      *
      * @var string
      */
-    protected $description = 'Listen to Queue!?';
+    protected $description = 'Listens and dispatches Redis messages';
 
     /**
      * Create a new command instance.
@@ -42,8 +43,11 @@ class ListenToQueue extends Command
     {
         Redis::connection('subscribe')
             ->subscribe([env('MESSAGE_TOPIC')], function ($message) {
-                dump($message);
-                ComposerFileParser::parse($message);
+               $message = json_decode($message, true);
+                RedisMessageRepository::publish(
+                    ComposerFileParser::parse($message['payload']),
+                    $message['headers']
+                );
             });
     }
 }
