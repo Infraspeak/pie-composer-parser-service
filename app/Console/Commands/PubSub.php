@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Parsers\ComposerFileParser;
-use App\Models\User;
 use App\Repositories\RedisMessageRepository;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
@@ -43,7 +42,7 @@ class PubSub extends Command
     {
         Redis::connection('subscribe')
             ->subscribe([env('MESSAGE_TOPIC')], function ($message) {
-               $message = json_decode($message, true);
+                $message = json_decode($message, true);
                 RedisMessageRepository::publish(
                     ComposerFileParser::parse($message['payload']),
                     $message['headers']

@@ -3,7 +3,6 @@
 namespace App\Parsers;
 
 use App\Repositories\PackagistRepository;
-use App\Repositories\RedisMessageRepository;
 
 class ComposerFileParser
 {
