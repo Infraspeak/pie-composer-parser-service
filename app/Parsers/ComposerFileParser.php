@@ -3,6 +3,7 @@
 namespace App\Parsers;
 
 use App\Repositories\PackagistRepository;
+use App\Repositories\RedisMessageRepository;
 
 class ComposerFileParser
 {
@@ -19,6 +20,7 @@ class ComposerFileParser
                 'url' => PackagistRepository::getUrl($name),
             ];
         }
-        dump($result);
+
+        RedisMessageRepository::publish($result);
     }
 }

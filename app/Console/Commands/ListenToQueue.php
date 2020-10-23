@@ -40,8 +40,10 @@ class ListenToQueue extends Command
      */
     public function handle()
     {
-        Redis::subscribe(['COMPOSER_FILE'], function($message) {
-            ComposerFileParser::parse($message);
-        });
+        Redis::connection('subscribe')
+            ->subscribe([env('MESSAGE_TOPIC')], function ($message) {
+                dump($message);
+                ComposerFileParser::parse($message);
+            });
     }
 }
