@@ -33,3 +33,5 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring opcache tokenizer xml ctype js
 # Copy Composer dependencies
 COPY --from=vendor /app/vendor/ ./vendor/
 COPY . .
+
+ENTRYPOINT php artisan redis:queue
