@@ -7,10 +7,9 @@ use App\Repositories\RedisMessageRepository;
 
 class ComposerFileParser
 {
-    public static function parse(string $composerFile)
+    public static function parse(array $composerFile)
     {
-        $fileToJson = json_decode($composerFile, true);
-        $requirements = array_merge($fileToJson['payload']['require'], $fileToJson['payload']['require-dev']);
+        $requirements = array_merge($composerFile['require'], $composerFile['require-dev']);
 
         $result = [];
         foreach ($requirements as $name => $version) {
@@ -20,7 +19,6 @@ class ComposerFileParser
                 'url' => PackagistRepository::getUrl($name),
             ];
         }
-
-        RedisMessageRepository::publish($result);
+        return $result;
     }
 }
