@@ -3,17 +3,8 @@ version: "3.7"
 services:
   php-sim:
     image: registry.gitlab.com/infraspeak/web/web-core-api/php:7.4-fpm-dev
-    ports:
-      - 8081:8000
     volumes:
       - .:/usr/src/app
     working_dir: /usr/src/app/public
     command: php -S 0.0.0.0:8000
-    network_mode: host
-
-  redis-sim:
-    image: redis:5.0.6-alpine
-    ports:
-      - 6379:6379
-    command: redis-server --appendonly yes
     network_mode: host
