@@ -14,6 +14,7 @@ PIE project is composed by 5 projects:
 This service is connected to a Redis channel, listening for messages that contain the content of `composer.json` files. It will then parse those contents and inject into a different Redis channel all repositories found.
 
 ## Project Setup
+The following commands assume you have `.direnv` installed and authorized. Check how to do it [here](https://direnv.net/docs/installation.html)
 ```
 docker build -t infraspeak-pie/composer-parser-service-composer -f .docker/composer/Dockerfile .docker/composer/
 composer install
