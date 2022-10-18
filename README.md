@@ -22,7 +22,7 @@ cp .env.example .env
 ```
 
 ## Project Run
-`PHP artisan redis:queue`
+`php artisan redis:queue`
 
 ## How it works
 This service is connected to a Redis channel listening for messages with a specific topic (defaults to `COMPOSER_FILE`). Those messages contain a UUID and the content of a `composer.json` file ex:
