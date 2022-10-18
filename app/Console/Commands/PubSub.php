@@ -40,29 +40,26 @@ class PubSub extends Command
      */
     public function handle()
     {
-        try {
+
             Redis::connection('subscribe')
                 ->subscribe([env('MESSAGE_TOPIC')], function ($message) {
                     $message = json_decode($message, true);
-                    RedisMessageRepository::publish(
-                        ComposerFileParser::parse($message['payload']),
-                        $message['headers']
-                    );
+                    try {
+                        RedisMessageRepository::publish(
+                            ComposerFileParser::parse($message['payload']),
+                            $message['headers']
+                        );
+                    }
+                    catch (\Exception $e){
+                        $error = [
+                            "code" => $e->getCode(),
+                            "description" => $e->getMessage()
+                        ];
+
+                        RedisMessageRepository::publishError($error,
+                            $message['headers']
+                        );
+                    }
                 });
         }
-        catch (\Exception $e){
-            $error = ["code" => $e->getCode(),
-                    "description" => $e->getMessage()
-              ];
-
-            Redis::connection('subscribe')
-                ->subscribe([env('MESSAGE_TOPIC')], function ($message) use ($error){
-                    $message = json_decode($message, true);
-                    RedisMessageRepository::publishError($error,
-                        $message['headers']
-                    );
-                });
-        }
-
-    }
 }
