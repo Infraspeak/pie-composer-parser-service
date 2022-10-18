@@ -22,4 +22,15 @@ class RedisMessageRepository
                 );
         }
     }
+
+    public static function publishError(array $errors, $headers): void
+    {
+        $envelope = ['headers' => $headers];
+
+        Redis::connection('publish')
+            ->publish(
+                'APP_ERRORS',
+                json_encode(array_merge($envelope, ['payload' => ['errors' => $errors]]))
+            );
+    }
 }

@@ -3,8 +3,6 @@
 namespace App\Parsers;
 
 use App\Repositories\PackagistRepository;
-use http\Exception\InvalidArgumentException;
-use PHPUnit\Exception;
 
 class ComposerFileParser
 {
